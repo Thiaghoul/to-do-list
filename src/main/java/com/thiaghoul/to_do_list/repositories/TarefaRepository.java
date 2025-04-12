@@ -8,11 +8,4 @@ import java.util.List;
 
 public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
 
-
-//    @Override
-//    void deleteById(Long id);
-//
-//    @Override
-//    List<Tarefa> findAll();
-
 }
