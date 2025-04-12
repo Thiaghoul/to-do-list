@@ -22,18 +22,29 @@ public class TarefaController {
     }
 
     @GetMapping
-    public List<Tarefa> findAll(){
-         return service.getAllTarefa();
+    public ResponseEntity<List<Tarefa>> findAll(){
+        List<Tarefa> list = service.getAllTarefa();
+        if(list.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }else{
+            return ResponseEntity.ok().body(list);
+        }
     }
 
     @GetMapping(value = "/{id}")
-    public Optional<Tarefa> findById(@PathVariable Long id){
-        return service.getById(id);
+    public ResponseEntity<Optional<Tarefa>> findById(@PathVariable Long id){
+        Optional<Tarefa> tarefa = service.getById(id);
+        if(tarefa.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }else{
+            return ResponseEntity.ok().body(tarefa);
+        }
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteById(@PathVariable Long id){
+    public ResponseEntity deleteById(@PathVariable Long id){
         service.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/{id}")
