@@ -6,6 +6,7 @@ import com.thiaghoul.to_do_list.repositories.TarefaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,17 +39,26 @@ public class TarefaService {
         repository.deleteById(id);
     }
 
-    public Tarefa updateById(Long id, Tarefa newTarefa){
+    public Optional<Tarefa> updateById(Long id, Tarefa newTarefa){
         Tarefa oldTarefa = repository.getReferenceById(id);
         updateDados(oldTarefa, newTarefa);
-        return repository.save(oldTarefa);
+
+        return Optional.of(repository.save(oldTarefa));
     }
 
     private void updateDados(Tarefa antiga, Tarefa nova){
-        antiga.setTitulo(nova.getTitulo());
-        antiga.setDescricao(nova.getDescricao());
-        antiga.setData(nova.getData());
-        antiga.setStatus(nova.getStatus());
+        if(nova.getTitulo() != null){
+            antiga.setTitulo(nova.getTitulo());
+        }
+        if(nova.getDescricao() != null){
+            antiga.setDescricao(nova.getDescricao());
+        }
+        if(nova.getData() != null){
+            antiga.setData(nova.getData());
+        }
+        if(nova.getStatus() != null){
+            antiga.setStatus(nova.getStatus());
+        }
     }
 
 }

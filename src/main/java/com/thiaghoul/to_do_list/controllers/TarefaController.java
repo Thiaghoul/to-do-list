@@ -61,9 +61,16 @@ public class TarefaController {
     }
 
     @PutMapping(value = "/{id}")
-    public Tarefa update(@PathVariable Long id, @RequestBody Tarefa tarefa){
-        tarefa = service.updateById(id, tarefa);
-        return tarefa;
+    public ResponseEntity<Optional<Tarefa>> update(@PathVariable Long id, @RequestBody Tarefa tarefa){
+        Optional<Tarefa> tarefaPut = service.updateById(id, tarefa);
+
+        if(!tarefaPut.isEmpty()){
+            return ResponseEntity.ok().body(tarefaPut);
+
+        }else{
+            return ResponseEntity.badRequest().body(tarefaPut);
+
+        }
     }
 
 
