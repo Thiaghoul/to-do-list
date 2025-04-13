@@ -5,7 +5,9 @@ import com.thiaghoul.to_do_list.services.TarefaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,8 +19,19 @@ public class TarefaController {
     private TarefaService service;
 
     @PostMapping()
-    public Tarefa insert(@RequestBody Tarefa tarefa){
-        return service.insert(tarefa);
+    public ResponseEntity<Optional<Tarefa>> insert(@RequestBody Tarefa tarefa){
+        Optional<Tarefa> tarefaPost = service.insert(tarefa);
+
+        if(!tarefaPost.isEmpty()){
+            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                    .buildAndExpand(tarefaPost.get().getId()).toUri();
+
+            return ResponseEntity.created(uri).body(tarefaPost);
+
+        }else{
+            return ResponseEntity.badRequest().body(tarefaPost);
+
+        }
     }
 
     @GetMapping

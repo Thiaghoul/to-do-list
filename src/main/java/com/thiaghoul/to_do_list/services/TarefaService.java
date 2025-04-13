@@ -1,6 +1,7 @@
 package com.thiaghoul.to_do_list.services;
 
 import com.thiaghoul.to_do_list.entities.Tarefa;
+import com.thiaghoul.to_do_list.entities.enums.Status;
 import com.thiaghoul.to_do_list.repositories.TarefaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,15 @@ public class TarefaService {
     @Autowired
     private TarefaRepository repository;
 
-    public Tarefa insert(Tarefa tarefa){
-        return repository.save(tarefa);
+    public Optional<Tarefa> insert(Tarefa tarefa){
+        if(tarefa.getTitulo() == null || tarefa.getData() == null ){
+            return Optional.empty();
+
+        }
+        if(tarefa.getStatus() == null){
+            tarefa.setStatus(Status.afazer);
+        }
+        return Optional.of(repository.save(tarefa));
     }
 
     public List<Tarefa> getAllTarefa(){
